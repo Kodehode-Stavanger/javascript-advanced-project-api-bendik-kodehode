@@ -7,5 +7,26 @@ box-sizing: border-box;
 body {
 height: 100vh;
 font-size: 16px;
-background-color: black;
+background-color: gray;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+}
+
+label {
+    margin-right: 10px;
+}
+
+.options {
+    display: flex;
+}
+
+input[type=number] {
+
 }
