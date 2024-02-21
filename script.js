@@ -16,6 +16,7 @@ const platforms = ["All", "PC", "Browser"];
 
 genreContainer.addEventListener("change", (e) => {
     selectedGenres.toggleElem(e.target.value);
+    console.log(selectedGenres)
 })
 
 
@@ -41,14 +42,11 @@ function generateOptions(arr, parent) {
         itemInput.id = itemLowerCase;
         itemInput.value = itemLowerCase;
 
-        itemLabel.for = itemLowerCase
+        itemLabel.setAttribute("for", itemLowerCase);
         itemLabel.textContent = e;
 
         parent.append(itemInput, itemLabel);
     });
-    
-
-
 }
 
 
