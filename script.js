@@ -28,9 +28,10 @@ Array.prototype.toggleElem = function(input) {
 function renderSite(data) {
     generateOptions(gameGenres, genreContainer);
     generateOptions(platforms, platformContainer);
+    // generateCard(data);
+    console.log(data);
 }
 
-renderSite();
 
 function generateOptions(arr, parent) {
     arr.forEach(e => {
@@ -49,6 +50,22 @@ function generateOptions(arr, parent) {
     });
 }
 
+// function generateCard(data) {
+//     const cardContainer = document.createElement("div");
+
+
+// }
+
+const cardContainer = document.querySelector(".card-container")
+cardContainer.addEventListener("click", function() {
+    this.classList.toggle("active");
+    const content = document.querySelector(".card-expand-content")
+    if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+    } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+    }
+})
 
 
 
@@ -64,4 +81,4 @@ async function getData() {
     }
 }
 
-// getData();
+getData();
