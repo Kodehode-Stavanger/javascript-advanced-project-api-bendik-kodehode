@@ -18,36 +18,38 @@ h1 {
     font-size: 4rem;
 }
 
-/* SECTIONS */
-#stats {
+/* CHECKBOXES & LABELS */
+header input[type="checkbox"] {
+    display: none;
+}
+
+header input[type="checkbox"]:checked + label {
+    background-color: #ff0000;
+}
+
+header label {
     display: flex;
     align-items: center;
-    justify-content: center;
+    user-select: none;
+    margin: 5px 5px;
+    padding: 2px 5px;
+    text-wrap: nowrap;
 }
 
-#options {
-    
+header label:hover {
+    cursor: pointer;
+    background-color: #dfdfdf;
 }
 
-
-
-.column {
+/* CONTAINERS */
+#categories-container {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 200px;
 }
 
-.row {
+#platforms-container {
     display: flex;
-}
-
-label {
-    margin-right: 10px;
-}
-
-.options {
-    display: flex;
-}
-
-input[type=number] {
-
+    flex-direction: row;
 }

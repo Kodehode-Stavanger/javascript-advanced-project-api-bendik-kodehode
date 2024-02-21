@@ -1,13 +1,20 @@
-const getInfo =  "https://v2.jokeapi.dev/info";
-const getJoke = " https://v2.jokeapi.dev/joke/";
+const categoriesContainer = document.querySelector("#categories-container");
+let selectedCategories = [];
 
-const optionsForm = document.getElementById("options-form");
+categoriesContainer.addEventListener("change", (e) => {
+    selectedCategories.toggleElem(e.target.value);
+})
+
+
+Array.prototype.toggleElem = function(input) {
+    this.includes(input) ? this.splice(this.indexOf(input), 1) : this.push(input);
+}
 
 
 
-async function getData(link) {
+async function getData() {
     try {
-        const result = await fetch(`${link}`);
+        const result = await fetch("https://www.freetogame.com/api/games");
         const data = await result.json();
         renderSite(data);
     } catch (error) {
@@ -15,20 +22,17 @@ async function getData(link) {
     }
 }
 
-getData(getInfo);
+getData();
 
 function renderSite(data) {
-    generateCheckboxOptions(data)
     console.log(data)
 }
 
+function renderCards() {
+    const itemContainer = document.createElement("div");
+
+}
+
 function generateCheckboxOptions(data) {
-    const categoryList = data.jokes.categories;
-    const flagList = data.jokes.flags;
-    const typeList = data.jokes.types;
 
-    const fieldset = document.createElement("fieldset");
-    const title = document.createElement("legend");
-
-    fieldset.classList.add(`${title.toLowerCase}`)
 }
