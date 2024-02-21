@@ -42,14 +42,19 @@ header label:hover {
 }
 
 /* CONTAINERS */
-#categories-container {
+#categories {
+    display: flex;
+    gap: 10px;
+}
+
+#genre-container {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     max-height: 200px;
 }
 
-#platforms-container {
+#platform-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }

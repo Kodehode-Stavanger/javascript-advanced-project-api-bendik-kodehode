@@ -1,14 +1,58 @@
-const categoriesContainer = document.querySelector("#categories-container");
-let selectedCategories = [];
+const genreContainer = document.querySelector("#genre-container");
+const platformContainer = document.querySelector("#platform-container");
+let selectedGenres = [];
 
-categoriesContainer.addEventListener("change", (e) => {
-    selectedCategories.toggleElem(e.target.value);
+const gameGenres = [
+    "MMORPG", "Shooter", "Strategy", "MOBA", "Racing", "Sports", "Social", "Sandbox",
+    "Open-world", "Survival", "PvP", "PvE", "Pixel", "Voxel", "Zombie", "Turn-based",
+    "First-person", "Third-person", "Top-down", "Tank", "Space", "Sailing", "Side-scroller",
+    "Superhero", "Permadeath", "Card", "Battle-royale", "MMO", "MMOFPS", "MMOTPS", "3D", "2D",
+    "Anime", "Fantasy", "Sci-fi", "Fighting", "Action-RPG", "Action", "Military", "Martial-arts",
+    "Flight", "Low-spec", "Tower-defense", "Horror", "MMORTS"
+  ];
+
+const platforms = ["All", "PC", "Browser"];
+  
+
+genreContainer.addEventListener("change", (e) => {
+    selectedGenres.toggleElem(e.target.value);
 })
 
 
+//For science!
 Array.prototype.toggleElem = function(input) {
     this.includes(input) ? this.splice(this.indexOf(input), 1) : this.push(input);
 }
+
+function renderSite(data) {
+    generateOptions(gameGenres, genreContainer);
+    generateOptions(platforms, platformContainer);
+}
+
+renderSite();
+
+function generateOptions(arr, parent) {
+    arr.forEach(e => {
+        const itemInput = document.createElement("input");
+        const itemLabel = document.createElement("label");
+        const itemLowerCase = e.toLowerCase();
+
+        itemInput.type = "checkbox";
+        itemInput.id = itemLowerCase;
+        itemInput.value = itemLowerCase;
+
+        itemLabel.for = itemLowerCase
+        itemLabel.textContent = e;
+
+        parent.append(itemInput, itemLabel);
+    });
+    
+
+
+}
+
+
+
 
 
 
@@ -22,17 +66,4 @@ async function getData() {
     }
 }
 
-getData();
-
-function renderSite(data) {
-    console.log(data)
-}
-
-function renderCards() {
-    const itemContainer = document.createElement("div");
-
-}
-
-function generateCheckboxOptions(data) {
-
-}
+// getData();
