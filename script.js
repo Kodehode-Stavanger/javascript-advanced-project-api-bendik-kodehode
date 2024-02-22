@@ -2,6 +2,7 @@ const genreContainer = document.querySelector("#genre-container");
 const platformContainer = document.querySelector("#platform-container");
 const mainContent = document.querySelector("#main-content");
 const sortOrderIcon = document.querySelector("#sort-order-icon");
+const sortFilter = document.querySelector("#sort-filter")
 
 const apiMainURL = "https://www.freetogame.com/api/games"
 const apiFilterURL = "https://www.freetogame.com/api/filter"
@@ -31,6 +32,7 @@ async function getData(url) {
         }
     }
 
+// Initialize
 getData(apiMainURL);
 
 let selectedGenres = [];
@@ -54,6 +56,10 @@ sortOrderIcon.addEventListener("click", () => {
         ? (sortOrderIcon.src = "./icons/Ascending.png", isAscending = true)
         : (sortOrderIcon.src = "./icons/Descending.png", isAscending = false);
     getData(generateURL())
+})
+
+sortFilter.addEventListener("change", () => {
+    if (sortFilter.value) getData(generateURL());
 })
 
 //For science!
@@ -125,13 +131,15 @@ function generateURL() {
     const apiNewURL = `${apiFilterURL}?`;
     const parameters = [];
 
-    if (!(selectedPlatform || selectedGenres.length)) return apiMainURL;
+    if (!(selectedPlatform || selectedGenres.length || sortFilter.value)) return apiMainURL;
 
     if (selectedPlatform) parameters.push(`platform=${selectedPlatform}`);
     if (selectedGenres.length) parameters.push(`tag=${selectedGenres.join(".")}`)
+    if (sortFilter.value) parameters.push(`sort-by=${sortFilter.value}`)
 
     return `${apiNewURL}${parameters.join("&")}`
 }
+
 
 // const cardContainer = document.querySelector(".card-container")
 // cardContainer.addEventListener("click", function() {
