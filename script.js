@@ -2,8 +2,8 @@ const genreContainer = document.querySelector("#genre-container");
 const platformContainer = document.querySelector("#platform-container");
 const mainContent = document.querySelector("#main-content");
 
-apiMainURL = "https://www.freetogame.com/api/games"
-apiFilterURL = "https://www.freetogame.com/api/filter"
+const apiMainURL = "https://www.freetogame.com/api/games"
+const apiFilterURL = "https://www.freetogame.com/api/filter"
 
 const gameGenres = [
     "MMORPG", "Shooter", "Strategy", "MOBA", "Racing", "Sports", "Social", "Sandbox",
@@ -16,23 +16,7 @@ const gameGenres = [
 
 const platforms = ["All", "PC", "Browser"];
   
-let selectedGenres = [];
-let selectedPlatform = "";
 
-genreContainer.addEventListener("change", (e) => {
-    selectedGenres.toggleElem(e.target.value);
-    console.log(selectedGenres)
-})
-
-platformContainer.addEventListener("change", (e) => {
-    selectedPlatform = e.target.value;
-    console.log("selected: ", selectedPlatform)
-})
-
-//For science!
-Array.prototype.toggleElem = function(input) {
-    this.includes(input) ? this.splice(this.indexOf(input), 1) : this.push(input);
-}
 
 async function getData(url) {
     try {
@@ -45,14 +29,32 @@ async function getData(url) {
     }
 }
 
-getData();
+// getData(apiMainURL);
+
+let selectedGenres = [];
+let selectedPlatform = "";
+
+genreContainer.addEventListener("change", (e) => {
+    selectedGenres.toggleElem(e.target.value);
+    console.log(selectedGenres)
+    if (selectedGenres.length) generateURL();
+})
+
+platformContainer.addEventListener("change", (e) => {
+    selectedPlatform = e.target.value;
+    console.log("selected: ", selectedPlatform)
+    if (selectedPlatform) generateURL();
+})
+
+//For science!
+Array.prototype.toggleElem = function(input) {
+    this.includes(input) ? this.splice(this.indexOf(input), 1) : this.push(input);
+}
 
 function renderContent(data) {
     generateCard(data);
     console.log(data);
-    console.log(typeof(data))
 }
-
 
 function generateOptions(arr, parent, type) {
     arr.forEach((e) => {
@@ -106,13 +108,25 @@ function generateCard(data) {
     });
 }
 
-const cardContainer = document.querySelector(".card-container")
-cardContainer.addEventListener("click", function() {
-    this.classList.toggle("active");
-    const content = document.querySelector(".card-expand-content")
-    if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-    } else {
-        content.style.maxHeight = content.scrollHeight + "px";
-    }
-})
+function generateURL() {
+    let apiNewURL = `${apiFilterURL}?`;
+    let parameters = [];
+
+    if (selectedPlatform) parameters.push(`platform=${selectedPlatform}`);
+    if (selectedGenres.length) parameters.push(`category=${selectedGenres.join(".")}`)
+
+    apiNewURL = `${apiNewURL}${parameters.join("&")}`
+
+    console.log(apiNewURL);
+}
+
+// const cardContainer = document.querySelector(".card-container")
+// cardContainer.addEventListener("click", function() {
+//     this.classList.toggle("active");
+//     const content = document.querySelector(".card-expand-content")
+//     if (content.style.maxHeight) {
+//         content.style.maxHeight = null;
+//     } else {
+//         content.style.maxHeight = content.scrollHeight + "px";
+//     }
+// })
