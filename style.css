@@ -28,11 +28,11 @@ h3 {
 }
 
 /* CHECKBOXES & LABELS */
-header input[type="checkbox"] {
+header input {
     display: none;
 }
 
-header input[type="checkbox"]:checked + label {
+header input:checked + label {
     background-color: #ff0000;
 }
 
@@ -96,4 +96,9 @@ header label:hover {
     display: flex;
     flex-direction: column;
     margin-left: 10px;
+}
+
+/* IMAGES */
+.card-thumbnail {
+    max-height: 100px;
 }

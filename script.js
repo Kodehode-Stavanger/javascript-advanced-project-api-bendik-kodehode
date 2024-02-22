@@ -1,6 +1,9 @@
 const genreContainer = document.querySelector("#genre-container");
 const platformContainer = document.querySelector("#platform-container");
-let selectedGenres = [];
+const mainContent = document.querySelector("#main-content");
+
+apiMainURL = "https://www.freetogame.com/api/games"
+apiFilterURL = "https://www.freetogame.com/api/filter"
 
 const gameGenres = [
     "MMORPG", "Shooter", "Strategy", "MOBA", "Racing", "Sports", "Social", "Sandbox",
@@ -13,48 +16,95 @@ const gameGenres = [
 
 const platforms = ["All", "PC", "Browser"];
   
+let selectedGenres = [];
+let selectedPlatform = "";
 
 genreContainer.addEventListener("change", (e) => {
     selectedGenres.toggleElem(e.target.value);
     console.log(selectedGenres)
 })
 
+platformContainer.addEventListener("change", (e) => {
+    selectedPlatform = e.target.value;
+    console.log("selected: ", selectedPlatform)
+})
 
 //For science!
 Array.prototype.toggleElem = function(input) {
     this.includes(input) ? this.splice(this.indexOf(input), 1) : this.push(input);
 }
 
-function renderSite(data) {
-    generateOptions(gameGenres, genreContainer);
-    generateOptions(platforms, platformContainer);
-    // generateCard(data);
+async function getData(url) {
+    try {
+        const result = await fetch("https://www.freetogame.com/api/games");
+        const data = await result.json();
+        console.log("Fetched");
+        renderContent(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+getData();
+
+function renderContent(data) {
+    generateCard(data);
     console.log(data);
+    console.log(typeof(data))
 }
 
 
-function generateOptions(arr, parent) {
-    arr.forEach(e => {
-        const itemInput = document.createElement("input");
-        const itemLabel = document.createElement("label");
-        const itemLowerCase = e.toLowerCase();
+function generateOptions(arr, parent, type) {
+    arr.forEach((e) => {
+            const itemInput = document.createElement("input");
+            const itemLabel = document.createElement("label");
+            const itemLowerCase = e.toLowerCase();
 
-        itemInput.type = "checkbox";
-        itemInput.id = itemLowerCase;
-        itemInput.value = itemLowerCase;
+            itemInput.type = type;
+            itemInput.id = itemLowerCase;
+            itemInput.value = itemLowerCase;
 
-        itemLabel.setAttribute("for", itemLowerCase);
-        itemLabel.textContent = e;
+            if (type === "radio") {
+                itemInput.name = type
+            }
 
-        parent.append(itemInput, itemLabel);
+            itemLabel.setAttribute("for", itemLowerCase);
+            itemLabel.textContent = e;
+
+            parent.append(itemInput, itemLabel);
     });
 }
+generateOptions(gameGenres, genreContainer, "checkbox");
+generateOptions(platforms, platformContainer, "radio");
 
-// function generateCard(data) {
-//     const cardContainer = document.createElement("div");
+function generateCard(data) {
+    data.forEach((e, i) => {
+        console.log("Started generating card")
+        const cardContainer = document.createElement("div");
+        const card = document.createElement("div");
+        const img = document.createElement("img");
+        const textContainer = document.createElement("div");
+        const title = document.createElement("h3");
+        const description = document.createElement("p");
+        const genre = document.createElement("p");
 
+        cardContainer.classList.add("card-container");
+        card.classList.add("card");
+        img.classList.add("card-thumbnail");
+        textContainer.classList.add("text-container");
+        genre.classList.add("genre");
+        
+        img.src = e.thumbnail;
+        title.textContent = e.title;
+        description.textContent = e.short_description;
+        genre.textContent = e.genre;
 
-// }
+        textContainer.append(title, description, genre);
+        card.append(img, textContainer);
+        cardContainer.append(card);
+        mainContent.append(cardContainer)
+    });
+}
 
 const cardContainer = document.querySelector(".card-container")
 cardContainer.addEventListener("click", function() {
@@ -66,19 +116,3 @@ cardContainer.addEventListener("click", function() {
         content.style.maxHeight = content.scrollHeight + "px";
     }
 })
-
-
-
-
-
-async function getData() {
-    try {
-        const result = await fetch("https://www.freetogame.com/api/games");
-        const data = await result.json();
-        renderSite(data);
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-getData();
