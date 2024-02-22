@@ -1,9 +1,12 @@
 const genreContainer = document.querySelector("#genre-container");
 const platformContainer = document.querySelector("#platform-container");
 const mainContent = document.querySelector("#main-content");
+const sortOrderIcon = document.querySelector("#sort-order-icon");
 
 const apiMainURL = "https://www.freetogame.com/api/games"
 const apiFilterURL = "https://www.freetogame.com/api/filter"
+
+let isAscending = false
 
 const gameGenres = [
     "MMORPG", "Shooter", "Strategy", "MOBA", "Racing", "Sports", "Social", "Sandbox",
@@ -16,20 +19,19 @@ const gameGenres = [
 
 const platforms = ["All", "PC", "Browser"];
   
-
-
 async function getData(url) {
-    try {
-        const result = await fetch("https://www.freetogame.com/api/games");
-        const data = await result.json();
-        console.log("Fetched");
-        renderContent(data);
-    } catch (error) {
-        console.log(error);
+        try {
+            const result = await fetch("https://www.freetogame.com/api/games");
+            const data = await result.json();
+            console.log("Fetched");
+            if (isAscending) data.reverse();
+            renderContent(data);
+        } catch (error) {
+            console.log(error);
+        }
     }
-}
 
-// getData(apiMainURL);
+getData(apiMainURL);
 
 let selectedGenres = [];
 let selectedPlatform = "";
@@ -37,13 +39,20 @@ let selectedPlatform = "";
 genreContainer.addEventListener("change", (e) => {
     selectedGenres.toggleElem(e.target.value);
     console.log(selectedGenres)
-    if (selectedGenres.length) generateURL();
+    if (selectedGenres.length) getData(generateURL());
 })
 
 platformContainer.addEventListener("change", (e) => {
     selectedPlatform = e.target.value;
     console.log("selected: ", selectedPlatform)
-    if (selectedPlatform) generateURL();
+    if (selectedPlatform) getData(generateURL());
+})
+
+sortOrderIcon.addEventListener("click", () => {
+    sortOrderIcon.src.includes("Descending") 
+        ? (sortOrderIcon.src = "./icons/Ascending.png", isAscending = true)
+        : (sortOrderIcon.src = "./icons/Descending.png", isAscending = false);
+    getData(generateURL())
 })
 
 //For science!
@@ -80,7 +89,10 @@ generateOptions(gameGenres, genreContainer, "checkbox");
 generateOptions(platforms, platformContainer, "radio");
 
 function generateCard(data) {
-    data.forEach((e, i) => {
+    const previousCards = document.querySelectorAll(".card-container")
+    previousCards.forEach(e => e.remove());
+
+    data.forEach((e) => {
         console.log("Started generating card")
         const cardContainer = document.createElement("div");
         const card = document.createElement("div");
@@ -112,12 +124,12 @@ function generateURL() {
     let apiNewURL = `${apiFilterURL}?`;
     let parameters = [];
 
+    if (!(selectedPlatform && selectedGenres.length)) return apiMainURL;
+
     if (selectedPlatform) parameters.push(`platform=${selectedPlatform}`);
     if (selectedGenres.length) parameters.push(`category=${selectedGenres.join(".")}`)
 
-    apiNewURL = `${apiNewURL}${parameters.join("&")}`
-
-    console.log(apiNewURL);
+    return `${apiNewURL}${parameters.join("&")}`
 }
 
 // const cardContainer = document.querySelector(".card-container")

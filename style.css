@@ -68,9 +68,10 @@ header label:hover {
     flex-direction: column;
 }
 
-#select-container {
+#sort-container {
     display: flex;
     width: 100%;
+    gap: 5px;
     justify-content: flex-end;
 }
 
@@ -107,4 +108,8 @@ header label:hover {
 /* IMAGES */
 .card-thumbnail {
     max-height: 100px;
+}
+
+#sort-order-icon {
+    max-height: 30px;
 }
