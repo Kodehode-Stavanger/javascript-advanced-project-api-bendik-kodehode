@@ -21,7 +21,7 @@ const platforms = ["All", "PC", "Browser"];
   
 async function getData(url) {
         try {
-            const result = await fetch("https://www.freetogame.com/api/games");
+            const result = await fetch(url);
             const data = await result.json();
             console.log("Fetched");
             if (isAscending) data.reverse();
@@ -38,8 +38,9 @@ let selectedPlatform = "";
 
 genreContainer.addEventListener("change", (e) => {
     selectedGenres.toggleElem(e.target.value);
-    console.log(selectedGenres)
     if (selectedGenres.length) getData(generateURL());
+    console.log(selectedGenres)
+    console.log("new url: ", generateURL())
 })
 
 platformContainer.addEventListener("change", (e) => {
@@ -121,13 +122,13 @@ function generateCard(data) {
 }
 
 function generateURL() {
-    let apiNewURL = `${apiFilterURL}?`;
-    let parameters = [];
+    const apiNewURL = `${apiFilterURL}?`;
+    const parameters = [];
 
-    if (!(selectedPlatform && selectedGenres.length)) return apiMainURL;
+    if (!(selectedPlatform || selectedGenres.length)) return apiMainURL;
 
     if (selectedPlatform) parameters.push(`platform=${selectedPlatform}`);
-    if (selectedGenres.length) parameters.push(`category=${selectedGenres.join(".")}`)
+    if (selectedGenres.length) parameters.push(`tag=${selectedGenres.join(".")}`)
 
     return `${apiNewURL}${parameters.join("&")}`
 }
