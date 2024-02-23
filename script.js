@@ -71,8 +71,8 @@ pageSizeFilter.addEventListener("change", () => {
 })
 
 //For science!
-Array.prototype.toggleElem = function(input) {
-    this.includes(input) ? this.splice(this.indexOf(input), 1) : this.push(input);
+Array.prototype.toggleElem = function(elem) {
+    this.includes(elem) ? this.splice(this.indexOf(elem), 1) : this.push(elem);
 }
 
 function generateOptions(arr, parent, type) {
@@ -161,7 +161,38 @@ function paginate(data) {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
-    console.log(totalPages)
+    generatePageControls(totalPages);
 
     return data.slice(startIndex, endIndex);
+}
+
+function generatePageControls(totalPages) {
+    const pageControlContainer = document.querySelector("#page-control-container");
+
+    const previousButton = document.createElement("a");
+    const nextButton = document.createElement("a");
+    previousButton.textContent = "Previous";
+    nextButton.textContent = "Next";
+    previousButton.classList.add("page-control");
+    nextButton.classList.add("page-control");
+
+    pageControlContainer.append(previousButton)
+    console.log("total pages:", totalPages)
+
+    console.log("generating page controls")
+
+    for (let i = 0; i < totalPages; i++) {
+        const numberedButton = document.createElement("a");
+        numberedButton.textContent = `${i + 1}`;
+        numberedButton.classList.add("page-control");
+
+        pageControlContainer.append(numberedButton);
+
+        if (i > 3) {
+            numberedButton.textContent = "..."
+            break;
+        };
+    }
+
+    pageControlContainer.append(nextButton);
 }
