@@ -27,7 +27,7 @@
         <section id="main-content">
             <div id="sort-wrapper">
                 <div id="page-size-container">
-                    <p>Items per page:</p>
+                    <p>Games per page:</p>
                     <select id="page-size-filter">
                         <option value="25">25</option>
                         <option value="50">50</option>
@@ -36,11 +36,12 @@
                 </div>
                 <div id="sort-container">
                     <img id="sort-order-icon" src="./icons/Descending.png">
+                    <p>Sort by:</p>
                     <select id="sort-filter">
-                        <option value="">-</option>
+                        <!-- Value none since relevance is default -->
+                        <option value="">Relevance</option> 
                         <option value="alphabetical">Alphabetical</option>
                         <option value="popularity">Popularity</option>
-                        <option value="relevance">Relevance</option>
                         <option value="release-date">Release Date</option>
                     </select>
                 </div>
