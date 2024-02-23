@@ -59,7 +59,7 @@ sortOrderIcon.addEventListener("click", () => {
 })
 
 sortFilter.addEventListener("change", () => {
-    if (sortFilter.value) getData(generateURL());
+    getData(generateURL());
 })
 
 //For science!
@@ -131,13 +131,32 @@ function generateURL() {
     const apiNewURL = `${apiFilterURL}?`;
     const parameters = [];
 
-    if (!(selectedPlatform || selectedGenres.length || sortFilter.value)) return apiMainURL;
+    const paramPlatform = () => {
+        parameters.push(`platform=${selectedPlatform}`);
+    }
+    const paramSort = () => {
+        parameters.push(`sort-by=${sortFilter.value}`);
+    }
 
-    if (selectedPlatform) parameters.push(`platform=${selectedPlatform}`);
-    if (selectedGenres.length) parameters.push(`tag=${selectedGenres.join(".")}`)
-    if (sortFilter.value) parameters.push(`sort-by=${sortFilter.value}`)
+    if (!(selectedPlatform || selectedGenres.length || sortFilter.value)) {
+        console.log("returned first original")
+        return apiMainURL;
+    }
 
-    return `${apiNewURL}${parameters.join("&")}`
+    if (!selectedGenres.length) {
+        if (selectedPlatform) paramPlatform();
+        if (sortFilter.value) paramSort();
+    }
+    else {
+        if (selectedPlatform) paramPlatform();
+        if (selectedGenres.length) parameters.push(`tag=${selectedGenres.join(".")}`)
+        if (sortFilter.value) paramSort();
+        console.log("returned filtered")
+        return `${apiFilterURL}?${parameters.join("&")}`
+    }
+
+    console.log("returned second original")
+    return `${apiMainURL}?${parameters.join("&")}`
 }
 
 
