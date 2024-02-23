@@ -1,6 +1,6 @@
 const genreContainer = document.querySelector("#genre-container");
 const platformContainer = document.querySelector("#platform-container");
-const mainContent = document.querySelector("#main-content");
+const cardList = document.querySelector("#card-list");
 const sortOrderIcon = document.querySelector("#sort-order-icon");
 const sortFilter = document.querySelector("#sort-filter")
 const pageSizeFilter = document.querySelector("#page-size-filter")
@@ -8,7 +8,10 @@ const pageSizeFilter = document.querySelector("#page-size-filter")
 const apiMainURL = "https://www.freetogame.com/api/games"
 const apiFilterURL = "https://www.freetogame.com/api/filter"
 
-let isAscending = false
+const ascendingIconPath = "./icons/Ascending.png";
+const descendingIconPath = "./icons/Descending.png";
+
+let sortAscending = false
 let currentPage = 1;
 
 const gameGenres = [
@@ -26,7 +29,7 @@ async function getData(url) {
         try {
             const result = await fetch(url);
             let data = await result.json();
-            if (isAscending) data.reverse();
+            if (sortAscending) data.reverse();
             data = paginate(data);
             generateCard(data);
         } catch (error) {
@@ -40,7 +43,7 @@ generateOptions(gameGenres, genreContainer, "checkbox");
 generateOptions(platforms, platformContainer, "radio");
 
 const selectedGenres = [];
-const selectedPlatform = "";
+let selectedPlatform = "";
 
 genreContainer.addEventListener("change", (e) => {
     selectedGenres.toggleElem(e.target.value);
@@ -54,9 +57,9 @@ platformContainer.addEventListener("change", (e) => {
 
 sortOrderIcon.addEventListener("click", () => {
     sortOrderIcon.src.includes("Descending") 
-        ? (sortOrderIcon.src = "./icons/Ascending.png", isAscending = true)
-        : (sortOrderIcon.src = "./icons/Descending.png", isAscending = false);
-    getData(generateURL())
+        ? (sortOrderIcon.src = ascendingIconPath, sortAscending = true)
+        : (sortOrderIcon.src = descendingIconPath, sortAscending = false);
+    getData(generateURL());
 })
 
 sortFilter.addEventListener("change", () => {
@@ -65,7 +68,6 @@ sortFilter.addEventListener("change", () => {
 
 pageSizeFilter.addEventListener("change", () => {
     getData(generateURL());
-    console.log(typeof(pageSizeFilter.value))
 })
 
 //For science!
@@ -96,12 +98,13 @@ function generateOptions(arr, parent, type) {
 }
 
 function generateCard(data) {
-    const previousCards = document.querySelectorAll(".card-container")
-    previousCards.forEach(e => e.remove());
+    // const previousCards = document.querySelectorAll(".card-container")
+    // previousCards.forEach(e => e.remove());
+
+    while (cardList.firstChild) cardList.firstChild.remove();
 
     data.forEach((e) => {
-        const cardContainer = document.createElement("div");
-        const card = document.createElement("div");
+        const cardContainer = document.createElement("li");
         const img = document.createElement("img");
         const textContainer = document.createElement("div");
         const title = document.createElement("h3");
@@ -109,7 +112,6 @@ function generateCard(data) {
         const genre = document.createElement("p");
 
         cardContainer.classList.add("card-container");
-        card.classList.add("card");
         img.classList.add("card-thumbnail");
         textContainer.classList.add("text-container");
         genre.classList.add("genre");
@@ -120,9 +122,8 @@ function generateCard(data) {
         genre.textContent = e.genre;
 
         textContainer.append(title, description, genre);
-        card.append(img, textContainer);
-        cardContainer.append(card);
-        mainContent.append(cardContainer)
+        cardContainer.append(img, textContainer);
+        cardList.append(cardContainer)
     });
 }
 
@@ -160,16 +161,7 @@ function paginate(data) {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
+    console.log(totalPages)
+
     return data.slice(startIndex, endIndex);
 }
-
-// const cardContainer = document.querySelector(".card-container")
-// cardContainer.addEventListener("click", function() {
-//     this.classList.toggle("active");
-//     const content = document.querySelector(".card-expand-content")
-//     if (content.style.maxHeight) {
-//         content.style.maxHeight = null;
-//     } else {
-//         content.style.maxHeight = content.scrollHeight + "px";
-//     }
-// })

@@ -16,6 +16,7 @@ align-items: center;
 /* TEXT */
 h1 {
     font-size: 4rem;
+    text-align: center;
 }
 
 h3 {
@@ -90,23 +91,11 @@ header label:hover {
     width: 800px;
     height: fit-content;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 
 .card-container:hover, .active {
     background-color: rgb(136, 136, 136);
-}
-
-.card-expand-content {
-    width: 800px;
-    overflow: hidden;
-    background-color: rgb(80, 80, 80);
-    max-height: 0;
-    transition: max-height 0.2s ease-out;
-}
-
-.card {
-    display: flex;
 }
 
 .text-container {
