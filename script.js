@@ -3,11 +3,13 @@ const platformContainer = document.querySelector("#platform-container");
 const mainContent = document.querySelector("#main-content");
 const sortOrderIcon = document.querySelector("#sort-order-icon");
 const sortFilter = document.querySelector("#sort-filter")
+const pageSizeFilter = document.querySelector("#page-size-filter")
 
 const apiMainURL = "https://www.freetogame.com/api/games"
 const apiFilterURL = "https://www.freetogame.com/api/filter"
 
 let isAscending = false
+let currentPage = 1;
 
 const gameGenres = [
     "MMORPG", "Shooter", "Strategy", "MOBA", "Racing", "Sports", "Social", "Sandbox",
@@ -23,10 +25,10 @@ const platforms = ["All", "PC", "Browser"];
 async function getData(url) {
         try {
             const result = await fetch(url);
-            const data = await result.json();
-            console.log("Fetched");
+            let data = await result.json();
             if (isAscending) data.reverse();
-            renderContent(data);
+            data = paginate(data);
+            generateCard(data);
         } catch (error) {
             console.log(error);
         }
@@ -34,21 +36,20 @@ async function getData(url) {
 
 // Initialize
 getData(apiMainURL);
+generateOptions(gameGenres, genreContainer, "checkbox");
+generateOptions(platforms, platformContainer, "radio");
 
-let selectedGenres = [];
-let selectedPlatform = "";
+const selectedGenres = [];
+const selectedPlatform = "";
 
 genreContainer.addEventListener("change", (e) => {
     selectedGenres.toggleElem(e.target.value);
-    if (selectedGenres.length) getData(generateURL());
-    console.log(selectedGenres)
-    console.log("new url: ", generateURL())
+    getData(generateURL());
 })
 
 platformContainer.addEventListener("change", (e) => {
     selectedPlatform = e.target.value;
-    console.log("selected: ", selectedPlatform)
-    if (selectedPlatform) getData(generateURL());
+    getData(generateURL());
 })
 
 sortOrderIcon.addEventListener("click", () => {
@@ -62,14 +63,14 @@ sortFilter.addEventListener("change", () => {
     getData(generateURL());
 })
 
+pageSizeFilter.addEventListener("change", () => {
+    getData(generateURL());
+    console.log(typeof(pageSizeFilter.value))
+})
+
 //For science!
 Array.prototype.toggleElem = function(input) {
     this.includes(input) ? this.splice(this.indexOf(input), 1) : this.push(input);
-}
-
-function renderContent(data) {
-    generateCard(data);
-    console.log(data);
 }
 
 function generateOptions(arr, parent, type) {
@@ -82,6 +83,7 @@ function generateOptions(arr, parent, type) {
             itemInput.id = itemLowerCase;
             itemInput.value = itemLowerCase;
 
+            // Same name if radio, so they're linked
             if (type === "radio") {
                 itemInput.name = type
             }
@@ -92,15 +94,12 @@ function generateOptions(arr, parent, type) {
             parent.append(itemInput, itemLabel);
     });
 }
-generateOptions(gameGenres, genreContainer, "checkbox");
-generateOptions(platforms, platformContainer, "radio");
 
 function generateCard(data) {
     const previousCards = document.querySelectorAll(".card-container")
     previousCards.forEach(e => e.remove());
 
     data.forEach((e) => {
-        console.log("Started generating card")
         const cardContainer = document.createElement("div");
         const card = document.createElement("div");
         const img = document.createElement("img");
@@ -128,7 +127,6 @@ function generateCard(data) {
 }
 
 function generateURL() {
-    const apiNewURL = `${apiFilterURL}?`;
     const parameters = [];
 
     const paramPlatform = () => {
@@ -138,11 +136,10 @@ function generateURL() {
         parameters.push(`sort-by=${sortFilter.value}`);
     }
 
-    if (!(selectedPlatform || selectedGenres.length || sortFilter.value)) {
-        console.log("returned first original")
-        return apiMainURL;
-    }
+    // If none selected
+    if (!(selectedPlatform || selectedGenres.length || sortFilter.value)) return apiMainURL;
 
+    // NOTE: The "Filter" endpoint only works when genre(tag) is included.
     if (!selectedGenres.length) {
         if (selectedPlatform) paramPlatform();
         if (sortFilter.value) paramSort();
@@ -151,14 +148,20 @@ function generateURL() {
         if (selectedPlatform) paramPlatform();
         if (selectedGenres.length) parameters.push(`tag=${selectedGenres.join(".")}`)
         if (sortFilter.value) paramSort();
-        console.log("returned filtered")
         return `${apiFilterURL}?${parameters.join("&")}`
     }
 
-    console.log("returned second original")
     return `${apiMainURL}?${parameters.join("&")}`
 }
 
+function paginate(data) {
+    const itemsPerPage = parseInt(pageSizeFilter.value);
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    return data.slice(startIndex, endIndex);
+}
 
 // const cardContainer = document.querySelector(".card-container")
 // cardContainer.addEventListener("click", function() {

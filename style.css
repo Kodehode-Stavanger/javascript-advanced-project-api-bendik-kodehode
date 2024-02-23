@@ -68,11 +68,21 @@ header label:hover {
     flex-direction: column;
 }
 
-#sort-container {
+#sort-wrapper {
     display: flex;
     width: 100%;
     gap: 5px;
-    justify-content: flex-end;
+    justify-content: space-between;
+}
+
+#sort-container {
+    display: flex;
+    align-items: center;
+}
+
+#page-size-container {
+    display: flex;
+    align-items: center;
 }
 
 .card-container {
