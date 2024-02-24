@@ -74,27 +74,9 @@ pageSizeFilter.addEventListener("change", () => {
 
 pagnationContainer.addEventListener("submit", (e) => {
     e.preventDefault();
-    const selected = e.submitter.value
-    switch (selected) {
-        case "start":
-            currentPage = 1;
-            break;
-        case "end":
-            currentPage = totalPages;
-            break;
-        case "next":
-            currentPage++;
-            break;
-        case "prev":
-            currentPage--;
-            break;
-        default:
-            currentPage = parseInt(selected);
-    };
+    handlePageSwitch(e.submitter.value);
 
-    console.log("EventListener: ", currentPage)
     getData(generateURL());
-
 })
 
 //For science!
@@ -262,4 +244,23 @@ function generatePageControls() {
 
 
     pagnationContainer.append(nextBtn, jumpToEndBtn);
+}
+
+function handlePageSwitch(selected) {
+    switch (selected) {
+        case "start":
+            currentPage = 1;
+            break;
+        case "end":
+            currentPage = totalPages;
+            break;
+        case "next":
+            currentPage++;
+            break;
+        case "prev":
+            currentPage--;
+            break;
+        default:
+            currentPage = parseInt(selected);
+    };
 }
