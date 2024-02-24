@@ -169,14 +169,20 @@ function paginate(data) {
 function generatePageControls(totalPages) {
     const pageControlContainer = document.querySelector("#page-control-container");
 
-    const previousButton = document.createElement("a");
-    const nextButton = document.createElement("a");
-    previousButton.textContent = "Previous";
-    nextButton.textContent = "Next";
-    previousButton.classList.add("page-control");
-    nextButton.classList.add("page-control");
+    const previousBtn = document.createElement("a");
+    const nextBtn = document.createElement("a");
+    const jumpToStartBtn = document.createElement("a");
+    const jumpToEndBtn = document.createElement("a");
+    previousBtn.textContent = "\u2039";
+    nextBtn.textContent = "\u203A";
+    jumpToStartBtn.textContent = "\u00AB"
+    jumpToEndBtn.textContent = "\u00BB"
+    previousBtn.classList.add("page-control");
+    nextBtn.classList.add("page-control");
+    jumpToStartBtn.classList.add("page-control");
+    jumpToEndBtn.classList.add("page-control");
 
-    pageControlContainer.append(previousButton)
+    pageControlContainer.append(jumpToStartBtn, previousBtn)
     console.log("total pages:", totalPages)
 
     console.log("generating page controls")
@@ -194,5 +200,5 @@ function generatePageControls(totalPages) {
         };
     }
 
-    pageControlContainer.append(nextButton);
+    pageControlContainer.append(nextBtn, jumpToEndBtn);
 }
