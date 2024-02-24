@@ -168,6 +168,7 @@ function paginate(data) {
 
 function generatePageControls(totalPages) {
     const pageControlContainer = document.querySelector("#page-control-container");
+    while (pageControlContainer.firstChild) pageControlContainer.firstChild.remove();
 
     const previousBtn = document.createElement("a");
     const nextBtn = document.createElement("a");
@@ -183,22 +184,22 @@ function generatePageControls(totalPages) {
     jumpToEndBtn.classList.add("page-control");
 
     pageControlContainer.append(jumpToStartBtn, previousBtn)
-    console.log("total pages:", totalPages)
 
-    console.log("generating page controls")
+    const numButtonsToShow = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(numButtonsToShow / 2));
+    let endPage = Math.min(totalPages, startPage + numButtonsToShow - 1);
 
-    for (let i = 0; i < totalPages; i++) {
+    if (endPage - startPage + 1 < numButtonsToShow) {
+        startPage = Math.max(1, endPage - numButtonsToShow + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
         const numberedButton = document.createElement("a");
-        numberedButton.textContent = `${i + 1}`;
+        numberedButton.textContent = `${i}`;
         numberedButton.classList.add("page-control");
 
         pageControlContainer.append(numberedButton);
-
-        if (i > 3) {
-            numberedButton.textContent = "..."
-            break;
-        };
-    }
+    };
 
     pageControlContainer.append(nextBtn, jumpToEndBtn);
 }
