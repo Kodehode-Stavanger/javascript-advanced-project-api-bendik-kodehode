@@ -244,16 +244,22 @@ function generatePageControls() {
         pagnationContainer.append(numberedButton);
     };
 
-    console.log("generate: ", currentPage)
-    console.log("generate startPage:", startPage)
-
     currentPage === startPage 
-        ? (jumpToStartBtn.disabled = true, previousBtn.disabled = true)
-        : (jumpToStartBtn.disabled = false, previousBtn.disabled = false);
+        ? previousBtn.disabled = true
+        : previousBtn.disabled = false;
 
     currentPage === endPage
-        ? (jumpToEndBtn.disabled = true, nextBtn.disabled = true)
-        : (jumpToEndBtn.disabled = false, nextBtn.disabled = false)
+        ? nextBtn.disabled = true
+        : nextBtn.disabled = false;
+
+    currentPage < (startPage + 2)
+        ? jumpToStartBtn.disabled = true
+        : jumpToStartBtn.disabled = false;
+    
+    currentPage > (endPage - 2)
+        ? jumpToEndBtn.disabled = true
+        : jumpToEndBtn.disabled = false;
+
 
     pagnationContainer.append(nextBtn, jumpToEndBtn);
 }
