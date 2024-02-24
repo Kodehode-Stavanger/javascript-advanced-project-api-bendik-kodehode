@@ -32,9 +32,8 @@ async function getData(url) {
         try {
             const result = await fetch(url);
             let data = await result.json();
-            if (sortAscending) data.reverse();
-            data = paginate(data);
-            generateCard(data);
+            renderSite(data);
+            
         } catch (error) {
             console.log(error);
         }
@@ -94,6 +93,23 @@ Array.prototype.toggleElem = function(elem) {
     this.includes(elem) ? this.splice(this.indexOf(elem), 1) : this.push(elem);
 }
 
+function renderSite(data) {
+    while (cardList.firstChild) cardList.firstChild.remove();
+    
+    if (sortAscending) data.reverse();
+
+    if (data.length) {
+        data = paginate(data);
+        generateCard(data)
+    }
+    else {
+        const emptyListError = document.createElement("p");
+        emptyListError.textContent = "No matches were found.";
+        emptyListError.style.textAlign = "center";
+        cardList.append(emptyListError);
+    };
+}
+
 function generateOptions(arr, parent, type) {
     arr.forEach((e) => {
             const itemInput = document.createElement("input");
@@ -117,8 +133,6 @@ function generateOptions(arr, parent, type) {
 }
 
 function generateCard(data) {
-    while (cardList.firstChild) cardList.firstChild.remove();
-
     data.forEach((e) => {
         const cardContainer = document.createElement("li");
         const img = document.createElement("img");
@@ -174,13 +188,17 @@ function generateURL() {
 function paginate(data) {
     const itemsPerPage = parseInt(pageSizeFilter.value);
     totalPages = Math.ceil(data.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+
+    if (data.length > itemsPerPage) {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        data = data.slice(startIndex, endIndex);
+    }
 
     generatePageControls(pagnationAboveContainer);
     generatePageControls(pagnationBelowContainer);
 
-    return data.slice(startIndex, endIndex);
+    return data;
 }
 
 function generatePageControls(parent) {
