@@ -81,7 +81,7 @@ h3 {
     margin-left: 10px;
 }
 
-#page-control-container {
+#pagnation-container {
     display: flex;
     width: 100%;
     justify-content: center;
@@ -97,7 +97,7 @@ h3 {
     max-height: 30px;
 }
 
-/* CHECKBOXES & LABELS & BUTTONS*/
+/* CHECKBOXES & LABELS & BUTTONS */
 header input {
     display: none;
 }
@@ -120,10 +120,32 @@ header label:hover {
     background-color: #dfdfdf;
 }
 
-.page-control {
+.pagnation-btn {
     background-color: #bebebe;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
     user-select: none;
+    font-size: 20px;
+}
+
+.pagnation-btn:hover {
+    background-color: #a1a1a1;
+}
+
+.pagnation-btn:active {
+    background-color: #8b8b8b
+}
+
+.pagnation-btn-current {
+    border: 1px solid red;
+}
+
+.pagnation-btn:disabled {
+    opacity: 50%;
+    cursor: default;
+}
+
+.pagnation-btn:disabled:hover {
+    background-color: #bebebe;
 }

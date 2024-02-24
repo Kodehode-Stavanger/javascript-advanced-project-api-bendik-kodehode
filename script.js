@@ -4,6 +4,7 @@ const cardList = document.querySelector("#card-list");
 const sortOrderIcon = document.querySelector("#sort-order-icon");
 const sortFilter = document.querySelector("#sort-filter")
 const pageSizeFilter = document.querySelector("#page-size-filter")
+const pagnationContainer = document.querySelector("#pagnation-container");
 
 const apiMainURL = "https://www.freetogame.com/api/games"
 const apiFilterURL = "https://www.freetogame.com/api/filter"
@@ -13,6 +14,7 @@ const descendingIconPath = "./icons/Descending.png";
 
 let sortAscending = false
 let currentPage = 1;
+let totalPages = 0;
 
 const gameGenres = [
     "MMORPG", "Shooter", "Strategy", "MOBA", "Racing", "Sports", "Social", "Sandbox",
@@ -70,6 +72,31 @@ pageSizeFilter.addEventListener("change", () => {
     getData(generateURL());
 })
 
+pagnationContainer.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const selected = e.submitter.value
+    switch (selected) {
+        case "start":
+            currentPage = 1;
+            break;
+        case "end":
+            currentPage = totalPages;
+            break;
+        case "next":
+            currentPage++;
+            break;
+        case "prev":
+            currentPage--;
+            break;
+        default:
+            currentPage = parseInt(selected);
+    };
+
+    console.log("EventListener: ", currentPage)
+    getData(generateURL());
+
+})
+
 //For science!
 Array.prototype.toggleElem = function(elem) {
     this.includes(elem) ? this.splice(this.indexOf(elem), 1) : this.push(elem);
@@ -98,9 +125,6 @@ function generateOptions(arr, parent, type) {
 }
 
 function generateCard(data) {
-    // const previousCards = document.querySelectorAll(".card-container")
-    // previousCards.forEach(e => e.remove());
-
     while (cardList.firstChild) cardList.firstChild.remove();
 
     data.forEach((e) => {
@@ -157,49 +181,79 @@ function generateURL() {
 
 function paginate(data) {
     const itemsPerPage = parseInt(pageSizeFilter.value);
-    const totalPages = Math.ceil(data.length / itemsPerPage);
+    totalPages = Math.ceil(data.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
-    generatePageControls(totalPages);
+    generatePageControls();
 
     return data.slice(startIndex, endIndex);
 }
 
-function generatePageControls(totalPages) {
-    const pageControlContainer = document.querySelector("#page-control-container");
-    while (pageControlContainer.firstChild) pageControlContainer.firstChild.remove();
+function generatePageControls() {
+    while (pagnationContainer.firstChild) pagnationContainer.firstChild.remove();
 
-    const previousBtn = document.createElement("a");
-    const nextBtn = document.createElement("a");
-    const jumpToStartBtn = document.createElement("a");
-    const jumpToEndBtn = document.createElement("a");
+    // Create direction buttons
+    const previousBtn = document.createElement("button");
+    const nextBtn = document.createElement("button");
+    const jumpToStartBtn = document.createElement("button");
+    const jumpToEndBtn = document.createElement("button");
+
+    previousBtn.type = "submit";
+    nextBtn.type = "submit";
+    jumpToStartBtn.type = "submit";
+    jumpToEndBtn.type = "submit";
+
     previousBtn.textContent = "\u2039";
     nextBtn.textContent = "\u203A";
-    jumpToStartBtn.textContent = "\u00AB"
-    jumpToEndBtn.textContent = "\u00BB"
-    previousBtn.classList.add("page-control");
-    nextBtn.classList.add("page-control");
-    jumpToStartBtn.classList.add("page-control");
-    jumpToEndBtn.classList.add("page-control");
+    jumpToStartBtn.textContent = "\u00AB";
+    jumpToEndBtn.textContent = "\u00BB";
 
-    pageControlContainer.append(jumpToStartBtn, previousBtn)
+    previousBtn.value = "prev";
+    nextBtn.value = "next";
+    jumpToStartBtn.value = "start";
+    jumpToEndBtn.value = "end";
 
+    previousBtn.classList.add("pagnation-btn");
+    nextBtn.classList.add("pagnation-btn");
+    jumpToStartBtn.classList.add("pagnation-btn");
+    jumpToEndBtn.classList.add("pagnation-btn");
+
+    pagnationContainer.append(jumpToStartBtn, previousBtn);
+
+    // Create numbered buttons
     const numButtonsToShow = 5;
     let startPage = Math.max(1, currentPage - Math.floor(numButtonsToShow / 2));
     let endPage = Math.min(totalPages, startPage + numButtonsToShow - 1);
 
     if (endPage - startPage + 1 < numButtonsToShow) {
         startPage = Math.max(1, endPage - numButtonsToShow + 1);
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-        const numberedButton = document.createElement("a");
-        numberedButton.textContent = `${i}`;
-        numberedButton.classList.add("page-control");
-
-        pageControlContainer.append(numberedButton);
     };
 
-    pageControlContainer.append(nextBtn, jumpToEndBtn);
+    for (let i = startPage; i <= endPage; i++) {
+        const numberedButton = document.createElement("button");
+        numButtonsToShow.type = "submit";
+        numberedButton.textContent = `${i}`;
+        numberedButton.classList.add("pagnation-btn");
+        numberedButton.value = i;
+
+        if (i === currentPage) {
+            numberedButton.classList.add("pagnation-btn-current");
+        };
+
+        pagnationContainer.append(numberedButton);
+    };
+
+    console.log("generate: ", currentPage)
+    console.log("generate startPage:", startPage)
+
+    currentPage === startPage 
+        ? (jumpToStartBtn.disabled = true, previousBtn.disabled = true)
+        : (jumpToStartBtn.disabled = false, previousBtn.disabled = false);
+
+    currentPage === endPage
+        ? (jumpToEndBtn.disabled = true, nextBtn.disabled = true)
+        : (jumpToEndBtn.disabled = false, nextBtn.disabled = false)
+
+    pagnationContainer.append(nextBtn, jumpToEndBtn);
 }
