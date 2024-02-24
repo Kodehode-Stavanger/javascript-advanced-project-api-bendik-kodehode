@@ -4,7 +4,8 @@ const cardList = document.querySelector("#card-list");
 const sortOrderIcon = document.querySelector("#sort-order-icon");
 const sortFilter = document.querySelector("#sort-filter")
 const pageSizeFilter = document.querySelector("#page-size-filter")
-const pagnationContainer = document.querySelector("#pagnation-container");
+const pagnationAboveContainer = document.querySelector("#pagnation-above-container");
+const pagnationBelowContainer = document.querySelector("#pagnation-below-container");
 
 const apiMainURL = "https://www.freetogame.com/api/games"
 const apiFilterURL = "https://www.freetogame.com/api/filter"
@@ -72,11 +73,20 @@ pageSizeFilter.addEventListener("change", () => {
     getData(generateURL());
 })
 
-pagnationContainer.addEventListener("submit", (e) => {
+pagnationAboveContainer.addEventListener("submit", (e) => {
     e.preventDefault();
     handlePageSwitch(e.submitter.value);
-
     getData(generateURL());
+})
+
+pagnationBelowContainer.addEventListener("submit", (e) => {
+    e.preventDefault();
+    handlePageSwitch(e.submitter.value);
+    getData(generateURL());
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 })
 
 //For science!
@@ -167,13 +177,14 @@ function paginate(data) {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
-    generatePageControls();
+    generatePageControls(pagnationAboveContainer);
+    generatePageControls(pagnationBelowContainer);
 
     return data.slice(startIndex, endIndex);
 }
 
-function generatePageControls() {
-    while (pagnationContainer.firstChild) pagnationContainer.firstChild.remove();
+function generatePageControls(parent) {
+    while (parent.firstChild) parent.firstChild.remove();
 
     // Create direction buttons
     const previousBtn = document.createElement("button");
@@ -201,7 +212,7 @@ function generatePageControls() {
     jumpToStartBtn.classList.add("pagnation-btn");
     jumpToEndBtn.classList.add("pagnation-btn");
 
-    pagnationContainer.append(jumpToStartBtn, previousBtn);
+    parent.append(jumpToStartBtn, previousBtn);
 
     // Create numbered buttons
     const numButtonsToShow = 5;
@@ -223,7 +234,7 @@ function generatePageControls() {
             numberedButton.classList.add("pagnation-btn-current");
         };
 
-        pagnationContainer.append(numberedButton);
+        parent.append(numberedButton);
     };
 
     currentPage === startPage 
@@ -243,7 +254,7 @@ function generatePageControls() {
         : jumpToEndBtn.disabled = false;
 
 
-    pagnationContainer.append(nextBtn, jumpToEndBtn);
+    parent.append(nextBtn, jumpToEndBtn);
 }
 
 function handlePageSwitch(selected) {

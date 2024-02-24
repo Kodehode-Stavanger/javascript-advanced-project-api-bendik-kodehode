@@ -81,7 +81,7 @@ h3 {
     margin-left: 10px;
 }
 
-#pagnation-container {
+.pagnation-control {
     display: flex;
     width: 100%;
     justify-content: center;
