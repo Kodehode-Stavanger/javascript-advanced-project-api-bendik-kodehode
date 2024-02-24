@@ -106,7 +106,7 @@ function renderSite(data) {
     }
     else {
         const emptyListError = document.createElement("p");
-        emptyListError.textContent = "No matches were found.";
+        emptyListError.textContent = "No matches were found :(";
         emptyListError.id = "empty-list-error"
         cardList.append(emptyListError);
         sortWrapper.style.display = "none"
