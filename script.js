@@ -13,7 +13,7 @@ const apiFilterURL = "https://www.freetogame.com/api/filter"
 const ascendingIconPath = "./icons/Ascending.png";
 const descendingIconPath = "./icons/Descending.png";
 
-let sortAscending = false
+let sortAscending = false;
 let currentPage = 1;
 let totalPages = 0;
 
@@ -33,7 +33,6 @@ async function getData(url) {
             const result = await fetch(url);
             let data = await result.json();
             renderSite(data);
-            
         } catch (error) {
             console.log(error);
         }
@@ -95,17 +94,18 @@ Array.prototype.toggleElem = function(elem) {
 
 function renderSite(data) {
     while (cardList.firstChild) cardList.firstChild.remove();
+    while (pagnationAboveContainer.firstChild) pagnationAboveContainer.firstChild.remove();
+    while (pagnationBelowContainer.firstChild) pagnationBelowContainer.firstChild.remove();
     
-    if (sortAscending) data.reverse();
-
     if (data.length) {
+        if (sortAscending) data.reverse();
         data = paginate(data);
         generateCard(data)
     }
     else {
         const emptyListError = document.createElement("p");
         emptyListError.textContent = "No matches were found.";
-        emptyListError.style.textAlign = "center";
+        emptyListError.id = "empty-list-error"
         cardList.append(emptyListError);
     };
 }
@@ -202,7 +202,6 @@ function paginate(data) {
 }
 
 function generatePageControls(parent) {
-    while (parent.firstChild) parent.firstChild.remove();
 
     // Create direction buttons
     const previousBtn = document.createElement("button");
