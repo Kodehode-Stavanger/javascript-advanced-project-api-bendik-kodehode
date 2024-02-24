@@ -3,6 +3,7 @@ const platformContainer = document.querySelector("#platform-container");
 const cardList = document.querySelector("#card-list");
 const sortOrderIcon = document.querySelector("#sort-order-icon");
 const sortFilter = document.querySelector("#sort-filter")
+const sortWrapper = document.querySelector("#sort-wrapper")
 const pageSizeFilter = document.querySelector("#page-size-filter")
 const pagnationAboveContainer = document.querySelector("#pagnation-above-container");
 const pagnationBelowContainer = document.querySelector("#pagnation-below-container");
@@ -101,12 +102,14 @@ function renderSite(data) {
         if (sortAscending) data.reverse();
         data = paginate(data);
         generateCard(data)
+        sortWrapper.style.display = "flex"
     }
     else {
         const emptyListError = document.createElement("p");
         emptyListError.textContent = "No matches were found.";
         emptyListError.id = "empty-list-error"
         cardList.append(emptyListError);
+        sortWrapper.style.display = "none"
     };
 }
 
