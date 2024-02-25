@@ -124,9 +124,10 @@ function generateOptions(arr, parent, type) {
             itemInput.value = itemLowerCase;
 
             // Same name if radio, so they're linked
-            if (type === "radio") {
-                itemInput.name = type
-            }
+            if (type === "radio") itemInput.name = type;
+
+            // Set "All" as default platform upon page load. 
+            if (e === "All") itemInput.checked = true;
 
             itemLabel.setAttribute("for", itemLowerCase);
             itemLabel.textContent = e;
