@@ -228,10 +228,10 @@ function generatePageControls(parent) {
     jumpToStartBtn.value = "start";
     jumpToEndBtn.value = "end";
 
-    previousBtn.classList.add("pagination-btn");
-    nextBtn.classList.add("pagination-btn");
-    jumpToStartBtn.classList.add("pagination-btn");
-    jumpToEndBtn.classList.add("pagination-btn");
+    previousBtn.classList.add("pagination-btn", "pagination-btn-arrow");
+    nextBtn.classList.add("pagination-btn", "pagination-btn-arrow");
+    jumpToStartBtn.classList.add("pagination-btn", "pagination-btn-arrow");
+    jumpToEndBtn.classList.add("pagination-btn", "pagination-btn-arrow");
 
     parent.append(jumpToStartBtn, previousBtn);
 
