@@ -5,8 +5,8 @@ const sortOrderIcon = document.querySelector("#sort-order-icon");
 const sortFilter = document.querySelector("#sort-filter")
 const sortWrapper = document.querySelector("#sort-wrapper")
 const pageSizeFilter = document.querySelector("#page-size-filter")
-const pagnationAboveContainer = document.querySelector("#pagnation-above-container");
-const pagnationBelowContainer = document.querySelector("#pagnation-below-container");
+const paginationAboveContainer = document.querySelector("#pagination-above-container");
+const paginationBelowContainer = document.querySelector("#pagination-below-container");
 
 const apiMainURL = "https://www.freetogame.com/api/games"
 const apiFilterURL = "https://www.freetogame.com/api/filter"
@@ -72,13 +72,13 @@ pageSizeFilter.addEventListener("change", () => {
     getData(generateURL());
 })
 
-pagnationAboveContainer.addEventListener("submit", (e) => {
+paginationAboveContainer.addEventListener("submit", (e) => {
     e.preventDefault();
     handlePageSwitch(e.submitter.value);
     getData(generateURL());
 })
 
-pagnationBelowContainer.addEventListener("submit", (e) => {
+paginationBelowContainer.addEventListener("submit", (e) => {
     e.preventDefault();
     handlePageSwitch(e.submitter.value);
     getData(generateURL());
@@ -95,8 +95,8 @@ Array.prototype.toggleElem = function(elem) {
 
 function renderSite(data) {
     while (cardList.firstChild) cardList.firstChild.remove();
-    while (pagnationAboveContainer.firstChild) pagnationAboveContainer.firstChild.remove();
-    while (pagnationBelowContainer.firstChild) pagnationBelowContainer.firstChild.remove();
+    while (paginationAboveContainer.firstChild) paginationAboveContainer.firstChild.remove();
+    while (paginationBelowContainer.firstChild) paginationBelowContainer.firstChild.remove();
     
     if (data.length) {
         if (sortAscending) data.reverse();
@@ -199,8 +199,8 @@ function paginate(data) {
         data = data.slice(startIndex, endIndex);
     }
 
-    generatePageControls(pagnationAboveContainer);
-    generatePageControls(pagnationBelowContainer);
+    generatePageControls(paginationAboveContainer);
+    generatePageControls(paginationBelowContainer);
 
     return data;
 }
@@ -228,10 +228,10 @@ function generatePageControls(parent) {
     jumpToStartBtn.value = "start";
     jumpToEndBtn.value = "end";
 
-    previousBtn.classList.add("pagnation-btn");
-    nextBtn.classList.add("pagnation-btn");
-    jumpToStartBtn.classList.add("pagnation-btn");
-    jumpToEndBtn.classList.add("pagnation-btn");
+    previousBtn.classList.add("pagination-btn");
+    nextBtn.classList.add("pagination-btn");
+    jumpToStartBtn.classList.add("pagination-btn");
+    jumpToEndBtn.classList.add("pagination-btn");
 
     parent.append(jumpToStartBtn, previousBtn);
 
@@ -248,11 +248,11 @@ function generatePageControls(parent) {
         const numberedButton = document.createElement("button");
         numButtonsToShow.type = "submit";
         numberedButton.textContent = `${i}`;
-        numberedButton.classList.add("pagnation-btn");
+        numberedButton.classList.add("pagination-btn");
         numberedButton.value = i;
 
         if (i === currentPage) {
-            numberedButton.classList.add("pagnation-btn-current");
+            numberedButton.classList.add("pagination-btn-current");
         };
 
         parent.append(numberedButton);
