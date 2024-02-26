@@ -55,15 +55,18 @@ generateOptions(platforms, platformContainer, "radio");
 
 genreContainer.addEventListener("change", (e) => {
     selectedGenres.toggleElem(e.target.value);
+    currentPage = 1;
     getData(generateURL());
 })
 
 platformContainer.addEventListener("change", (e) => {
     selectedPlatform = e.target.value;
+    currentPage = 1;
     getData(generateURL());
 })
 
 sortOrderIcon.addEventListener("click", () => {
+    currentPage = 1;
     sortOrderIcon.src.includes("Descending") 
         ? (sortOrderIcon.src = iconPaths.ascending, sortAscending = true)
         : (sortOrderIcon.src = iconPaths.descending, sortAscending = false);
@@ -71,10 +74,12 @@ sortOrderIcon.addEventListener("click", () => {
 })
 
 sortFilter.addEventListener("change", () => {
+    currentPage = 1;
     getData(generateURL());
 })
 
 pageSizeFilter.addEventListener("change", () => {
+    currentPage = 1;
     getData(generateURL());
 })
 
@@ -108,7 +113,6 @@ function renderSite(data) {
         sortWrapper.style.display = "flex"
         paginationAboveContainer.style.display = "flex";
         paginationBelowContainer.style.display = "flex";
-        console.log(data);
         dataArrLength = data.length;
         if (sortAscending) data.reverse();
         generateCard(paginate(data));
