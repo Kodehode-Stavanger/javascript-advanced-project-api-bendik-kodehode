@@ -25,6 +25,7 @@ let selectedPlatform = "";
 let sortAscending = false;
 let currentPage = 1;
 let totalPages = 0;
+let dataArrLength = 0;
 
 const gameGenres = [
     "MMORPG", "Shooter", "Strategy", "MOBA", "Racing", "Sports", "Social", "Sandbox",
@@ -108,9 +109,9 @@ function renderSite(data) {
         paginationAboveContainer.style.display = "flex";
         paginationBelowContainer.style.display = "flex";
 
+        dataArrLength = data.length;
         if (sortAscending) data.reverse();
-        data = paginate(data);
-        generateCard(data)
+        generateCard(paginate(data));
     }
     else {
         sortWrapper.style.display = "none";
@@ -158,7 +159,7 @@ function generateCard(data) {
         
         const img = document.createElement("img");
         const title = document.createElement("h3");
-        const number = document.createElement("p");
+        const itemNumber = document.createElement("p");
         const description = document.createElement("p");
         const genre = document.createElement("p");
 
@@ -184,11 +185,14 @@ function generateCard(data) {
         
         img.src = e.thumbnail;
         title.textContent = e.title;
-        number.textContent = `#${i+1}`
         description.textContent = e.short_description;
         genre.textContent = e.genre;
 
-        titleContainer.append(title, number);
+        let indexPos = ((currentPage - 1) * parseInt(pageSizeFilter.value)) + i + 1;
+        if (sortAscending) indexPos = dataArrLength - indexPos + 1;
+        itemNumber.textContent = indexPos
+
+        titleContainer.append(title, itemNumber);
         textContainer.append(description, genre);
         descriptionContainer.append(textContainer, iconContainer);
         contentContainer.append(titleContainer, descriptionContainer);
