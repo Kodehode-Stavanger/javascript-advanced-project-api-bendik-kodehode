@@ -12,10 +12,10 @@ const apiMainURL = "https://www.freetogame.com/api/games"
 const apiFilterURL = "https://www.freetogame.com/api/filter"
 
 const iconPaths = {
-    ascending:  "./icons/Ascending.png",
+    ascending: "./icons/Ascending.png",
     descending: "./icons/Descending.png",
-    pc:         "./icons/PC.png",
-    web:        "./icons/Web.png" 
+    pc: "./icons/PC.png",
+    web: "./icons/Web.png" 
 }
 const ascendingIconPath = "./icons/Ascending.png";
 const descendingIconPath = "./icons/Descending.png";
@@ -108,7 +108,7 @@ function renderSite(data) {
         sortWrapper.style.display = "flex"
         paginationAboveContainer.style.display = "flex";
         paginationBelowContainer.style.display = "flex";
-
+        console.log(data);
         dataArrLength = data.length;
         if (sortAscending) data.reverse();
         generateCard(paginate(data));
@@ -177,20 +177,29 @@ function generateCard(data) {
         }
 
         cardContainer.classList.add("card-container");
+        contentContainer.classList.add("content-container");
         textContainer.classList.add("text-container");
-        titleContainer.classList.add("title-container")
+        titleContainer.classList.add("title-container");
         descriptionContainer.classList.add("description-container");
+        iconContainer.classList.add("platform-icon-container");
+        description.classList.add("description")
         img.classList.add("card-thumbnail");
         genre.classList.add("genre");
         
+        // anchor.href = e.game_url;
         img.src = e.thumbnail;
         title.textContent = e.title;
         description.textContent = e.short_description;
         genre.textContent = e.genre;
 
+        // Calculate index pos from original array, not paginated array.
         let indexPos = ((currentPage - 1) * parseInt(pageSizeFilter.value)) + i + 1;
         if (sortAscending) indexPos = dataArrLength - indexPos + 1;
-        itemNumber.textContent = indexPos
+        itemNumber.textContent = `#${indexPos}`;
+
+        cardContainer.addEventListener("click", () => {
+            window.location.href = e.game_url;
+        })
 
         titleContainer.append(title, itemNumber);
         textContainer.append(description, genre);

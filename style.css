@@ -7,6 +7,7 @@ box-sizing: border-box;
 :root {
     --lightgray: #9c9c9c;
     --orange-main: #a76d18;
+    --near-white: #d8d8d8;
 }
 
 body {
@@ -31,7 +32,6 @@ h1 {
     font-size: 4rem;
     font-family: "Orbitron", sans-serif;
     text-align: center;
-    color: rgb(255, 255, 255);
     letter-spacing: 2px;
     text-shadow: 1px 1px 0 var(--orange-main);
     background: linear-gradient(#ffcf86, #7a4900);
@@ -48,7 +48,8 @@ h2 {
 }
 
 h3 {
-    margin-bottom: 5px;
+    color: var(--near-white);
+    font-size: 1.3rem;
 }
 
 #empty-list-error {
@@ -62,11 +63,35 @@ h3 {
     margin-right: 8px;
 }
 
+.description {
+    color: var(--lightgray)
+}
+
+.title-container p {
+    color: var(--lightgray);
+    font-size: 1.1rem;
+}
+
+.genre {
+    color: var(--near-white);
+    width: fit-content;
+    background-color: rgba(136, 136, 136, 0.3);
+    padding: 5px 10px;
+    border-radius: 20px;
+    user-select: none;
+}
+
+a {
+   text-decoration: none; 
+   color: inherit;
+}
+
 /* CONTAINERS */
 #menu {
     display: flex;
     gap: 10px;
-    background-color: rgba(0, 0, 0, 0.2);
+    /* background-color: rgba(0, 0, 0, 0.2); */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
     padding: 10px 20px 20px 20px;;
     border-radius: 10px;
     margin-bottom: 20px;
@@ -111,41 +136,56 @@ h3 {
 #card-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
 }
 
 .card-container {
-    background-color: rgb(112, 112, 112);
-    width: 800px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
+    max-width: 950px;
+    min-height: 150px;
     display: flex;
     flex-direction: row;
-    /* margin: 20px 0; */
     border-radius: 8px;
     overflow: hidden;
-    transition: transform 0.2s ease-in;
+    cursor: pointer;
+    user-select: none;
 }
 
 .card-container:hover {
-    background-color: rgb(136, 136, 136);
-    transform: scale(1.05);
-    transition: transform 0.2s ease-out;
+    background: linear-gradient(to top, rgba(10, 10, 10, 0.3), rgba(10, 10, 10, 0.2));
+}
+
+.content-container {
+    width: 100%;
+    padding: 10px 15px;
 }
 
 .title-container {
     display: flex;
     justify-content: space-between;
+    height: 20%;
 }
 
 .description-container {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    height: 80%;
 }
 
 .text-container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-left: 10px;
+    height: 100%;
+    padding-top: 5px;
+}
+
+.platform-icon-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    /* padding: 0 5px; */
 }
 
 .pagination-control {
@@ -163,6 +203,7 @@ h3 {
 /* IMAGES / ICONS */
 .card-thumbnail {
     max-height: 150px;
+    border-radius: 8px 0 0 8px;
 }
 
 #sort-order-icon {
