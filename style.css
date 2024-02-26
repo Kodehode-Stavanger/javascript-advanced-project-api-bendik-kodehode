@@ -6,6 +6,7 @@ box-sizing: border-box;
 
 :root {
     --lightgray: #9c9c9c;
+    --orange-main: #a76d18;
 }
 
 body {
@@ -32,18 +33,17 @@ h1 {
     text-align: center;
     color: rgb(255, 255, 255);
     letter-spacing: 2px;
-    text-shadow: 1px 1px 0 rgb(167, 109, 24);
+    text-shadow: 1px 1px 0 var(--orange-main);
     background: linear-gradient(#ffcf86, #7a4900);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     user-select: none;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 h2 {
-    color: rgb(167, 109, 24);
-    font-family: "Montserrat", sans-serif;
+    color: var(--orange-main);
     margin-bottom: 5px;
 }
 
@@ -108,10 +108,15 @@ h3 {
     align-items: center;
 }
 
+#card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .card-container {
     background-color: rgb(112, 112, 112);
     width: 800px;
-    height: fit-content;
     display: flex;
     flex-direction: row;
     /* margin: 20px 0; */
@@ -126,9 +131,20 @@ h3 {
     transition: transform 0.2s ease-out;
 }
 
+.title-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.description-container {
+    display: flex;
+    flex-direction: row;
+}
+
 .text-container {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     margin-left: 10px;
 }
 
@@ -144,20 +160,29 @@ h3 {
     border-radius: 10px;
 }
 
-/* IMAGES */
+/* IMAGES / ICONS */
 .card-thumbnail {
-    max-height: 100px;
+    max-height: 150px;
 }
 
 #sort-order-icon {
-    max-height: 20px;
+    max-height: 15px;
     opacity: 75%;
     margin: 0 10px;
     cursor: pointer;
 }
 
 #sort-order-icon:hover {
-    opacity: 90%;
+    opacity: 100%;
+}
+
+.platform-icon {
+    max-height: 40px;
+    background-color: rgb(46, 46, 46);
+    padding: 10px;
+    overflow: visible;
+    border-radius: 50%;
+    opacity: 50%;
 }
 
 /* CHECKBOXES & LABELS & BUTTONS */

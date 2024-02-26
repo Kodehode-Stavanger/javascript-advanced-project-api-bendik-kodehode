@@ -11,9 +11,17 @@ const paginationBelowContainer = document.querySelector("#pagination-below-conta
 const apiMainURL = "https://www.freetogame.com/api/games"
 const apiFilterURL = "https://www.freetogame.com/api/filter"
 
+const iconPaths = {
+    ascending:  "./icons/Ascending.png",
+    descending: "./icons/Descending.png",
+    pc:         "./icons/PC.png",
+    web:        "./icons/Web.png" 
+}
 const ascendingIconPath = "./icons/Ascending.png";
 const descendingIconPath = "./icons/Descending.png";
 
+const selectedGenres = [];
+let selectedPlatform = "";
 let sortAscending = false;
 let currentPage = 1;
 let totalPages = 0;
@@ -44,9 +52,6 @@ getData(apiMainURL);
 generateOptions(gameGenres, genreContainer, "checkbox");
 generateOptions(platforms, platformContainer, "radio");
 
-const selectedGenres = [];
-let selectedPlatform = "";
-
 genreContainer.addEventListener("change", (e) => {
     selectedGenres.toggleElem(e.target.value);
     getData(generateURL());
@@ -59,8 +64,8 @@ platformContainer.addEventListener("change", (e) => {
 
 sortOrderIcon.addEventListener("click", () => {
     sortOrderIcon.src.includes("Descending") 
-        ? (sortOrderIcon.src = ascendingIconPath, sortAscending = true)
-        : (sortOrderIcon.src = descendingIconPath, sortAscending = false);
+        ? (sortOrderIcon.src = iconPaths.ascending, sortAscending = true)
+        : (sortOrderIcon.src = iconPaths.descending, sortAscending = false);
     getData(generateURL());
 })
 
@@ -99,17 +104,23 @@ function renderSite(data) {
     while (paginationBelowContainer.firstChild) paginationBelowContainer.firstChild.remove();
     
     if (data.length) {
+        sortWrapper.style.display = "flex"
+        paginationAboveContainer.style.display = "flex";
+        paginationBelowContainer.style.display = "flex";
+
         if (sortAscending) data.reverse();
         data = paginate(data);
         generateCard(data)
-        sortWrapper.style.display = "flex"
     }
     else {
+        sortWrapper.style.display = "none";
+        paginationAboveContainer.style.display = "none";
+        paginationBelowContainer.style.display = "none";
+
         const emptyListError = document.createElement("p");
         emptyListError.textContent = "No matches were found :(";
-        emptyListError.id = "empty-list-error"
+        emptyListError.id = "empty-list-error";
         cardList.append(emptyListError);
-        sortWrapper.style.display = "none"
     };
 }
 
@@ -137,27 +148,52 @@ function generateOptions(arr, parent, type) {
 }
 
 function generateCard(data) {
-    data.forEach((e) => {
+    data.forEach((e, i) => {
         const cardContainer = document.createElement("li");
-        const img = document.createElement("img");
+        const contentContainer = document.createElement("div");
+        const titleContainer = document.createElement("div");
+        const descriptionContainer = document.createElement("div");
         const textContainer = document.createElement("div");
+        const iconContainer = document.createElement("div");
+        
+        const img = document.createElement("img");
         const title = document.createElement("h3");
+        const number = document.createElement("p");
         const description = document.createElement("p");
         const genre = document.createElement("p");
 
+        if (e.platform.includes("PC")) {
+            const pcIcon = document.createElement("img");
+            pcIcon.src = iconPaths.pc;
+            pcIcon.classList.add("platform-icon");
+            iconContainer.append(pcIcon);
+        }
+        if (e.platform.includes("Web")) {
+            const webIcon = document.createElement("img");
+            webIcon.src = iconPaths.web;
+            webIcon.classList.add("platform-icon");
+            iconContainer.append(webIcon);
+        }
+
         cardContainer.classList.add("card-container");
-        img.classList.add("card-thumbnail");
         textContainer.classList.add("text-container");
+        titleContainer.classList.add("title-container")
+        descriptionContainer.classList.add("description-container");
+        img.classList.add("card-thumbnail");
         genre.classList.add("genre");
         
         img.src = e.thumbnail;
         title.textContent = e.title;
+        number.textContent = `#${i+1}`
         description.textContent = e.short_description;
         genre.textContent = e.genre;
 
-        textContainer.append(title, description, genre);
-        cardContainer.append(img, textContainer);
-        cardList.append(cardContainer)
+        titleContainer.append(title, number);
+        textContainer.append(description, genre);
+        descriptionContainer.append(textContainer, iconContainer);
+        contentContainer.append(titleContainer, descriptionContainer);
+        cardContainer.append(img, contentContainer);
+        cardList.append(cardContainer);
     });
 }
 
