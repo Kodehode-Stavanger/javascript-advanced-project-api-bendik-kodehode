@@ -40,11 +40,12 @@ const platforms = ["All", "PC", "Browser"];
   
 async function getData(url) {
         try {
-            const result = await fetch(`https://cors-anywhere.herokuapp.com/${url}`);
+            const result = await fetch(url);
             let data = await result.json();
             renderSite(data);
         } catch (error) {
             console.log(error);
+            displayError(error);
         }
     }
 
@@ -118,15 +119,19 @@ function renderSite(data) {
         generateCard(paginate(data));
     }
     else {
-        sortWrapper.style.display = "none";
-        paginationAboveContainer.style.display = "none";
-        paginationBelowContainer.style.display = "none";
-
-        const emptyListError = document.createElement("p");
-        emptyListError.textContent = "No matches were found :(";
-        emptyListError.id = "empty-list-error";
-        cardList.append(emptyListError);
+        displayError("No matches were found :(");
     };
+}
+
+function displayError(msg) {
+    sortWrapper.style.display = "none";
+    paginationAboveContainer.style.display = "none";
+    paginationBelowContainer.style.display = "none";
+
+    const emptyListError = document.createElement("p");
+    emptyListError.textContent = msg;
+    emptyListError.id = "empty-list-error";
+    cardList.append(emptyListError);
 }
 
 function generateOptions(arr, parent, type) {

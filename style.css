@@ -54,7 +54,6 @@ h3 {
 
 #empty-list-error {
     text-align: center;
-    font-size: 2rem;
     margin: 20px 0;
     color: var(--lightgray)
 }
@@ -65,7 +64,8 @@ h3 {
 }
 
 .description {
-    color: var(--lightgray)
+    color: var(--lightgray);
+    font-size: 0.9rem;
 }
 
 .title-container p {
