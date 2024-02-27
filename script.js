@@ -40,7 +40,7 @@ const platforms = ["All", "PC", "Browser"];
   
 async function getData(url) {
         try {
-            const result = await fetch(url);
+            const result = await fetch(`https://cors-anywhere.herokuapp.com/${url}`);
             let data = await result.json();
             renderSite(data);
         } catch (error) {
