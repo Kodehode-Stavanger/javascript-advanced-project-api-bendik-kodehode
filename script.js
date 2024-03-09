@@ -39,15 +39,15 @@ const gameGenres = [
 const platforms = ["All", "PC", "Browser"];
   
 async function getData(url) {
-        try {
-            const result = await fetch(url);
-            let data = await result.json();
-            renderSite(data);
-        } catch (error) {
-            console.log(error);
-            displayError(error);
-        }
+    try {
+        const result = await fetch(`https://corsproxy.io/?${url}`);
+        let data = await result.json();
+        renderSite(data);
+    } catch (error) {
+        console.log(error);
+        displayError(error);
     }
+}
 
 // Initialize
 getData(apiMainURL);
